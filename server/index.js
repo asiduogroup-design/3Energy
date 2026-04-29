@@ -17,6 +17,13 @@ app.get("/", (req, res) => {
   res.json({ message: "3Energy API is running" });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${PORT} is already in use. Stop old Node process and retry.`);
+    process.exit(1);
+  }
 });
