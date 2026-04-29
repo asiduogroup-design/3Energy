@@ -1,0 +1,144 @@
+:root {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: #353535;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% -10%, #f8f8f8 0%, #ededed 58%, #e7e7e7 100%);
+}
+
+.page {
+  min-height: 100vh;
+  padding: 10px;
+}
+
+.navbar {
+  width: min(1360px, 100%);
+  margin: 0 auto;
+  height: 104px;
+  background: linear-gradient(180deg, #fcfcfc 0%, #f6f6f6 100%);
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 58px;
+}
+
+.brand {
+  min-width: 146px;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: baseline;
+  line-height: 0.8;
+}
+
+.logo-three {
+  color: #f6ab00;
+  font-size: 82px;
+  font-weight: 700;
+  letter-spacing: -6px;
+}
+
+.logo-e {
+  color: #3c3c3c;
+  font-size: 76px;
+  font-weight: 700;
+  margin-left: -8px;
+  letter-spacing: -5px;
+}
+
+.brand-subtext {
+  display: block;
+  margin-top: -8px;
+  margin-left: 86px;
+  font-size: 37px;
+  color: #4a4a4a;
+  letter-spacing: -2px;
+  text-transform: lowercase;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+}
+
+.menu-link {
+  font-size: 26px;
+  text-decoration: none;
+  color: #4e4e4e;
+  padding: 2px 0 6px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.menu-link:hover {
+  color: #242424;
+}
+
+.menu-link.active {
+  color: #2f2f2f;
+  border-bottom-color: #e1a436;
+}
+
+.linkedin-link {
+  color: #383838;
+  font-size: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.linkedin-link:hover {
+  color: #1d1d1d;
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px 24px;
+    gap: 18px;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+  }
+
+  .menu-link {
+    font-size: 18px;
+  }
+
+  .logo-three {
+    font-size: 52px;
+    letter-spacing: -3px;
+  }
+
+  .logo-e {
+    font-size: 48px;
+    margin-left: -4px;
+    letter-spacing: -3px;
+  }
+
+  .brand-subtext {
+    margin-left: 55px;
+    margin-top: -6px;
+    font-size: 24px;
+  }
+
+  .linkedin-link {
+    font-size: 32px;
+  }
+}
