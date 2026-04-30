@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaArrowUp, FaLinkedin } from "react-icons/fa";
+import { FaArrowUp, FaChevronLeft, FaChevronRight, FaLinkedin } from "react-icons/fa";
 
 const menuItems = [
   { label: "Home", href: "/" },
@@ -22,6 +22,8 @@ const faiProjectPath = "/progetti/fai-fondo-per-lambiente-italiano";
 const vittoriaProjectPath = "/progetti/vittoria-assicurazioni-s-p-a";
 const kosProjectPath = "/progetti/kos-care-s-r-l";
 const fondazioneProjectPath = "/progetti/fondazione-collegio-delle-universita-milanesi";
+const eurocommercialProjectPath = "/progetti/eurocommercial-properties-italia-s-r-l-2";
+const aquilaProjectPath = "/progetti/aquila-clean-energy-italy-s-r-l";
 const originalProjectsOrigin = "https://www.3energy.it";
 
 function toHostedProjectPath(link) {
@@ -70,7 +72,7 @@ const progettiPortfolioItems = [
   {
     title: "Eurocommercial Properties Italia S.r.l.",
     image: "https://www.3energy.it/wp-content/uploads/2023/05/1Curno-rid-e1685596034338-700x580.jpg",
-    link: "https://www.3energy.it/progetti/eurocommercial-properties-italia-s-r-l-2/",
+    link: eurocommercialProjectPath,
   },
   {
     title: "Vittoria Assicurazioni S.p.a.",
@@ -80,7 +82,7 @@ const progettiPortfolioItems = [
   {
     title: "Aquila Clean Energy Italy S.r.l.",
     image: "https://www.3energy.it/wp-content/uploads/2023/06/1CBRE-AQUILA-700x580.jpg",
-    link: "https://www.3energy.it/progetti/aquila-clean-energy-italy-s-r-l/",
+    link: aquilaProjectPath,
   },
   {
     title: "Pensa Pharma S.p.A.",
@@ -654,6 +656,232 @@ function VittoriaProjectPage() {
   );
 }
 
+function ProjectImageSlider({ images, ariaLabel }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const activeImage = images[currentSlide] ?? images[0];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [images.length]);
+
+  const showPreviousSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const showNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % images.length);
+  };
+
+  return (
+    <div
+      className="project-detail-gallery project-image-slider"
+      aria-label={ariaLabel}
+      style={{ aspectRatio: activeImage?.aspectRatio ?? "4 / 3" }}
+    >
+      {images.map((image, index) => (
+        <img
+          key={image.src}
+          src={image.src}
+          alt={image.alt}
+          className={
+            index === currentSlide
+              ? "project-image-slide project-image-slide-active"
+              : "project-image-slide"
+          }
+        />
+      ))}
+      <button
+        type="button"
+        className="project-image-slider-arrow project-image-slider-prev"
+        onClick={showPreviousSlide}
+        aria-label="Previous image"
+      >
+        <FaChevronLeft />
+      </button>
+      <button
+        type="button"
+        className="project-image-slider-arrow project-image-slider-next"
+        onClick={showNextSlide}
+        aria-label="Next image"
+      >
+        <FaChevronRight />
+      </button>
+    </div>
+  );
+}
+
+function EurocommercialProjectPage() {
+  const galleryImages = [
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/1Curno-rid-e1685596034338.jpg",
+      alt: "Centro Commerciale Curno",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/2Curno-rid.jpg",
+      alt: "Impianti Centro Commerciale Curno",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/4Curno-rid.jpg",
+      alt: "Riqualificazione impianti Centro Commerciale Curno",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/3Curno-rid.jpg",
+      alt: "Centro Commerciale Curno esterno",
+      aspectRatio: "4 / 3",
+    },
+  ];
+
+  return (
+    <section className="project-detail-page" aria-label="Eurocommercial project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Eurocommercial Properties Italia S.r.l.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Riqualificazione energetica degli impianti di climatizzazione invernale ed estiva a
+            servizio del Centro Commerciale "Curno"
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Bergamo</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Eurocommercial Properties Italia S.r.l.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <ProjectImageSlider images={galleryImages} ariaLabel="Curno image slider" />
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href="/progetti/engie-servizi-s-p-a" className="project-detail-nav-link">
+          &lt; Engie Servizi S.p.a.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href={vittoriaProjectPath} className="project-detail-nav-link project-detail-nav-next">
+          Vittoria Assicurazioni S.p.a. &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function AquilaProjectPage() {
+  const galleryImages = [
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/1CBRE-AQUILA.jpg",
+      alt: "Aquila Clean Energy Italy office",
+      aspectRatio: "3 / 4",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/2CBRE-AQUILA.jpg",
+      alt: "Aquila Clean Energy Italy interior",
+      aspectRatio: "1024 / 812",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/3CBRE-AQUILA.jpg",
+      alt: "Aquila Clean Energy Italy meeting area",
+      aspectRatio: "3 / 4",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/4CBRE-AQUILA.jpg",
+      alt: "Aquila Clean Energy Italy workspace",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/06/5CBRE-AQUILA.jpg",
+      alt: "Aquila Clean Energy Italy office detail",
+      aspectRatio: "4 / 3",
+    },
+  ];
+
+  return (
+    <section className="project-detail-page" aria-label="Aquila project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Aquila Clean Energy Italy S.r.l.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Realizzazione nuova sede italiana della multinazionale Aquila Capital Italia
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Milano - Porta Nuova</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Aquila Clean Energy Italy S.r.l.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <ProjectImageSlider images={galleryImages} ariaLabel="Aquila image slider" />
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href={vittoriaProjectPath} className="project-detail-nav-link">
+          &lt; Vittoria Assicurazioni S.p.a.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href="/progetti/pensa-pharma-s-p-a" className="project-detail-nav-link project-detail-nav-next">
+          Pensa Pharma S.p.A. &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
 function KosProjectPage() {
   return (
     <section className="project-detail-page" aria-label="Kos project details">
@@ -873,6 +1101,8 @@ function App() {
   const isVittoriaProjectPage = currentPath === vittoriaProjectPath;
   const isKosProjectPage = currentPath === kosProjectPath;
   const isFondazioneProjectPage = currentPath === fondazioneProjectPath;
+  const isEurocommercialProjectPage = currentPath === eurocommercialProjectPath;
+  const isAquilaProjectPage = currentPath === aquilaProjectPath;
   const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
   const isServiziPage = currentPath === "/servizi";
   const isContattiPage = currentPath === "/contatti";
@@ -897,6 +1127,10 @@ function App() {
     page = <FaiProjectPage />;
   } else if (isVittoriaProjectPage) {
     page = <VittoriaProjectPage />;
+  } else if (isEurocommercialProjectPage) {
+    page = <EurocommercialProjectPage />;
+  } else if (isAquilaProjectPage) {
+    page = <AquilaProjectPage />;
   } else if (isKosProjectPage) {
     page = <KosProjectPage />;
   } else if (isFondazioneProjectPage) {
