@@ -17,38 +17,217 @@ const heroSlides = [
   { src: "/images/hero/hero5.png", caption: "Vittoria Assicurazioni S.p.A." },
 ];
 
+const siasProjectPath = "/progetti/s-i-a-s-societa-incremento-automobilismo-e-sport-s-p-a";
+const faiProjectPath = "/progetti/fai-fondo-per-lambiente-italiano";
+const vittoriaProjectPath = "/progetti/vittoria-assicurazioni-s-p-a";
+const kosProjectPath = "/progetti/kos-care-s-r-l";
+const fondazioneProjectPath = "/progetti/fondazione-collegio-delle-universita-milanesi";
+const originalProjectsOrigin = "https://www.3energy.it";
+
+function toHostedProjectPath(link) {
+  if (!link.startsWith(originalProjectsOrigin)) {
+    return link;
+  }
+
+  const hostedPath = link.slice(originalProjectsOrigin.length);
+  return hostedPath.endsWith("/") ? hostedPath.slice(0, -1) : hostedPath;
+}
+
 const projects = [
   {
     title: "S.I.A.S - Società Incremento Automobilismo e Sport S.p.A.",
     image: "/images/projects/project-1.jpg",
-    link: "https://www.3energy.it/progetti/s-i-a-s-societa-incremento-automobilismo-e-sport-s-p-a/",
+    link: siasProjectPath,
     large: false,
   },
   {
     title: "FAI - Fondo per l'Ambiente Italiano",
     image: "/images/projects/project-2.jpeg",
-    link: "https://www.3energy.it/progetti/fai-fondo-per-lambiente-italiano/",
+    link: faiProjectPath,
     large: false,
   },
   {
     title: "Vittoria Assicurazioni S.p.A.",
     image: "/images/projects/project-3.jpeg",
-    link: "https://www.3energy.it/progetti/vittoria-assicurazioni-s-p-a/",
+    link: vittoriaProjectPath,
     large: false,
   },
   {
     title: "Kos Care S.r.l.",
     image: "/images/projects/project-4.png",
-    link: "https://www.3energy.it/progetti/kos-care-s-r-l/",
+    link: kosProjectPath,
     large: true,
   },
   {
     title: "Fondazione Collegio delle Università Milanesi",
     image: "/images/projects/project-5.jpeg",
-    link: "https://www.3energy.it/progetti/fondazione-collegio-delle-universita-milanesi/",
+    link: fondazioneProjectPath,
     large: true,
   },
 ];
+
+const progettiPortfolioItems = [
+  {
+    title: "Eurocommercial Properties Italia S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/05/1Curno-rid-e1685596034338-700x580.jpg",
+    link: "https://www.3energy.it/progetti/eurocommercial-properties-italia-s-r-l-2/",
+  },
+  {
+    title: "Vittoria Assicurazioni S.p.a.",
+    image: "/images/projects/project-3.jpeg",
+    link: vittoriaProjectPath,
+  },
+  {
+    title: "Aquila Clean Energy Italy S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/06/1CBRE-AQUILA-700x580.jpg",
+    link: "https://www.3energy.it/progetti/aquila-clean-energy-italy-s-r-l/",
+  },
+  {
+    title: "Pensa Pharma S.p.A.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/06/PENSA-PHARMA-700x580.jpg",
+    link: "https://www.3energy.it/progetti/pensa-pharma-s-p-a/",
+  },
+  {
+    title: "Conteco Check S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image14-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/conteco-check-s-r-l/",
+  },
+  {
+    title: "Fendi Switzerland S.A.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/05/1Fendi-700x580.jpg",
+    link: "https://www.3energy.it/progetti/fendi-switzerland-s-a-2/",
+  },
+  {
+    title: "ASUR Marche",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image27.jpeg",
+    link: "https://www.3energy.it/progetti/asur-marche/",
+  },
+  {
+    title: "Gabbiano S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image5-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/gabbiano-s-p-a/",
+  },
+  {
+    title: "Uesisa S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image8-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/uesisa-s-p-a-2/",
+  },
+  {
+    title: "CNPADC - Cassa dei Dottori Commercialisti",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image15-700x580.png",
+    link: "https://www.3energy.it/progetti/cnpadc-cassa-dei-dottori-commercialisti/",
+  },
+  {
+    title: "Olympus Italia S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/06/1Olympus-700x580.jpg",
+    link: "https://www.3energy.it/progetti/olympus-italia-s-r-l/",
+  },
+  {
+    title: "Immobiliare Maiga S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image7-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/immobiliare-maiga-s-p-a/",
+  },
+  {
+    title: "Getec Italia S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image9-700x580.jpg",
+    link: "https://www.3energy.it/progetti/getec-italia-s-p-a/",
+  },
+  {
+    title: "Fondazione Cassa di Risparmio di Cuneo",
+    image: "https://www.3energy.it/wp-content/uploads/2023/06/1FCRC-Cuneo--700x580.jpg",
+    link: "https://www.3energy.it/progetti/fondazione-cassa-di-risparmio-di-cuneo-2/",
+  },
+  {
+    title: "S.I.A.S - Societa Incremento Automobilismo e Sport S.p.A.",
+    image: "/images/projects/project-1.jpg",
+    link: siasProjectPath,
+  },
+  {
+    title: "FAI - Fondo per l'Ambiente Italiano",
+    image: "/images/projects/project-2.jpeg",
+    link: faiProjectPath,
+  },
+  {
+    title: "Comune di Macerata",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image24.jpeg",
+    link: "https://www.3energy.it/progetti/comune-di-macerata/",
+  },
+  {
+    title: "Societa Italiana Servizi S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image25-700x580.jpg",
+    link: "https://www.3energy.it/progetti/societa-italiana-servizi-s-r-l/",
+  },
+  {
+    title: "Agenzia del Demanio",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image17-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/agenzia-del-demanio/",
+  },
+  {
+    title: "Ministero delle Infrastrutture e dei Trasporti",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image22-700x580.jpg",
+    link: "https://www.3energy.it/progetti/ministero-delle-infrastrutture-e-dei-trasporti-2/",
+  },
+  {
+    title: "Ministero delle Infrastrutture e dei Trasporti",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image21-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/ministero-delle-infrastrutture-e-dei-trasporti/",
+  },
+  {
+    title: "Immobiliare Triveneta S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image6.jpeg",
+    link: "https://www.3energy.it/progetti/immobiliare-triveneta-s-p-a/",
+  },
+  {
+    title: "Fondazione Collegio delle Universita Milanesi",
+    image: "/images/projects/project-5.jpeg",
+    link: fondazioneProjectPath,
+  },
+  {
+    title: "Kos Care S.r.l.",
+    image: "/images/projects/project-4.png",
+    link: kosProjectPath,
+  },
+  {
+    title: "Fondazione Don Carlo Gnocchi",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image16-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/fondazione-don-carlo-gnocchi/",
+  },
+  {
+    title: "Acquambiente Marche S.r.l.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image18-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/acquambiente-marche-s-r-l/",
+  },
+  {
+    title: "Prefettura di Fermo",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image20-e1683686084409-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/prefettura-di-fermo/",
+  },
+  {
+    title: "Uesisa S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image4-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/uesisa-s-p-a/",
+  },
+  {
+    title: "Fondazione Opera Pia Mastai Ferretti",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image19-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/fondazione-opera-pia-mastai-ferretti/",
+  },
+  {
+    title: "ACER Piacenza",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image12-700x580.png",
+    link: "https://www.3energy.it/progetti/acer-piacenza/",
+  },
+  {
+    title: "Cooperativa Sociale COOSS MARCHE ONLUS",
+    image: "https://www.3energy.it/wp-content/uploads/2023/02/image23-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/cooperativa-sociale-cooss-marche-onlus/",
+  },
+  {
+    title: "Engie Servizi S.p.a.",
+    image: "https://www.3energy.it/wp-content/uploads/2023/05/Cogeneratore-MC-700x580.jpeg",
+    link: "https://www.3energy.it/progetti/engie-servizi-s-p-a/",
+  },
+].map((project) => ({ ...project, link: toHostedProjectPath(project.link) }));
 
 const services = [
   {
@@ -231,19 +410,23 @@ function HomePage() {
       <section className="projects-section" id="progetti">
         <hr />
         <div className="projects-grid">
-          {projects.map((project) => (
-            <a
-              key={project.title}
-              href={project.link}
-              target="_blank"
-              rel="noreferrer"
-              className={project.large ? "project-card large" : "project-card"}
-              aria-label={project.title}
-            >
-              <img src={project.image} alt={project.title} />
-              <span className="project-overlay">{project.title}</span>
-            </a>
-          ))}
+          {projects.map((project) => {
+            const isExternalLink = project.link.startsWith("http");
+
+            return (
+              <a
+                key={project.title}
+                href={project.link}
+                target={isExternalLink ? "_blank" : undefined}
+                rel={isExternalLink ? "noreferrer" : undefined}
+                className={project.large ? "project-card large" : "project-card"}
+                aria-label={project.title}
+              >
+                <img src={project.image} alt={project.title} />
+                <span className="project-overlay">{project.title}</span>
+              </a>
+            );
+          })}
         </div>
         <a href="/progetti" className="primary-btn project-btn">
           Guarda i nostri progetti -&gt;
@@ -266,27 +449,267 @@ function HomePage() {
 function ProgettiPage() {
   return (
     <section className="progetti-page" aria-label="Progetti">
-      <div className="progetti-title-wrap">
-        <h1>Progetti</h1>
-      </div>
+      <div className="progetti-page-shell">
+        <div className="progetti-title-wrap">
+          <h1>Progetti</h1>
+        </div>
 
-      <div className="progetti-grid">
-        {projects.map((project) => (
-          <a
-            key={project.title}
-            href={project.link}
-            target="_blank"
-            rel="noreferrer"
-            className="progetti-card"
-            aria-label={project.title}
-          >
-            <img src={project.image} alt={project.title} />
-            <span className="progetti-card-title">{project.title}</span>
-          </a>
-        ))}
+        <div className="progetti-grid" role="list">
+          {progettiPortfolioItems.map((project) => {
+            const isExternalLink = project.link.startsWith("http");
+
+            return (
+              <article className="progetti-card-wrap" key={project.title} role="listitem">
+                <a
+                  href={project.link}
+                  target={isExternalLink ? "_blank" : undefined}
+                  rel={isExternalLink ? "noreferrer" : undefined}
+                  className="progetti-card"
+                  aria-label={project.title}
+                >
+                  <img src={project.image} alt={project.title} loading="lazy" />
+                  <span className="progetti-card-overlay">
+                    <span className="progetti-card-info">
+                      <span className="progetti-card-title">{project.title}</span>
+                      <span className="progetti-card-term">Progettazione e Direzione</span>
+                    </span>
+                  </span>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="progetti-show-more">
+          <button type="button" className="progetti-show-more-btn" disabled>
+            No more portfolio items to show
+          </button>
+        </div>
       </div>
     </section>
   );
+}
+
+function SiasProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="S.I.A.S project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>S.I.A.S - Societa Incremento Automobilismo e Sport S.p.A.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Realizzazione della nuova Direzione Gara dell&apos;Autodromo Nazionale di Monza
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Monza</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2020</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>S.I.A.S - Societa Incremento Automobilismo e Sport S.p.A.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery">
+          <img src="/images/projects/project-1.jpg" alt="S.I.A.S project in Monza" />
+        </div>
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function FaiProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="FAI project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>FAI - Fondo per l'Ambiente Italiano</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Riqualificazione energetica della centrale tecnologica alimentata ad acqua di falda a
+            servizio di Villa Necchi Campiglio
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Milano</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>FAI - Fondo per l'Ambiente Italiano</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery">
+          <img src="/images/projects/project-2.jpeg" alt="FAI project in Milano" />
+        </div>
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function VittoriaProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="Vittoria project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Vittoria Assicurazioni S.p.a.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Due diligence impiantistica delle sedi degli Ispettorati Sinistri di Vittoria
+            Assicurazioni
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>n.17 Provincie</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Vittoria Assicurazioni S.p.a.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Consulenza impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery">
+          <img src="/images/projects/project-3.jpeg" alt="Vittoria Assicurazioni project" />
+        </div>
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function KosProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="Kos project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Kos Care S.r.l.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Nuova residenza sanitaria assistita da 100 posti letto
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Campofilone (FM)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2017 - 2019</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Kos Care S.r.l.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery">
+          <img src="/images/projects/project-4.png" alt="Kos Care project" />
+        </div>
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function FondazioneProjectPage() {
+  return <FaiProjectPage />;
 }
 
 function ServiziPage() {
@@ -445,7 +868,12 @@ function ContattiPage() {
 function App() {
   const currentPath = normalizePath(window.location.pathname);
   const isChiSiamoPage = currentPath === "/chi-siamo";
-  const isProgettiPage = currentPath === "/progetti";
+  const isSiasProjectPage = currentPath === siasProjectPath;
+  const isFaiProjectPage = currentPath === faiProjectPath;
+  const isVittoriaProjectPage = currentPath === vittoriaProjectPath;
+  const isKosProjectPage = currentPath === kosProjectPath;
+  const isFondazioneProjectPage = currentPath === fondazioneProjectPath;
+  const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
   const isServiziPage = currentPath === "/servizi";
   const isContattiPage = currentPath === "/contatti";
 
@@ -463,6 +891,16 @@ function App() {
   let page = <HomePage />;
   if (isChiSiamoPage) {
     page = <ChiSiamoPage />;
+  } else if (isSiasProjectPage) {
+    page = <SiasProjectPage />;
+  } else if (isFaiProjectPage) {
+    page = <FaiProjectPage />;
+  } else if (isVittoriaProjectPage) {
+    page = <VittoriaProjectPage />;
+  } else if (isKosProjectPage) {
+    page = <KosProjectPage />;
+  } else if (isFondazioneProjectPage) {
+    page = <FondazioneProjectPage />;
   } else if (isProgettiPage) {
     page = <ProgettiPage />;
   } else if (isServiziPage) {
@@ -496,7 +934,7 @@ function App() {
           </nav>
 
           <a
-            href="https://it.linkedin.com/company/3energy-s-r-l"
+            href="https://www.linkedin.com/company/3energy-s-r-l"
             target="_blank"
             rel="noreferrer"
             className="header-linkedin"
@@ -519,7 +957,7 @@ function App() {
             <p>© Copyright 2026 - 3Energy srl - P.IVA 11003760961 | Samara Engineering solutions</p>
           </div>
           <div className="footer-right">
-            <a href="https://it.linkedin.com/company/3energy-s-r-l" target="_blank" rel="noreferrer">
+            <a href="https://www.linkedin.com/company/3energy-s-r-l" target="_blank" rel="noreferrer">
               LinkedIn
             </a>
           </div>
