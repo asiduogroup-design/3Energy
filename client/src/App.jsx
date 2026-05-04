@@ -348,10 +348,8 @@ const contattiOffices = [
   },
 ];
 
-const ADMIN_PROJECTS_STORAGE_KEY = "three-energy-admin-projects";
 const ADMIN_SESSION_KEY = "three-energy-admin-session";
-const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "3energy2026";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 const PROJECT_FALLBACK_IMAGE = "/images/projects/project-3.jpeg";
 
 function slugify(value) {
@@ -385,7 +383,7 @@ function normalizeAdminProject(project) {
   const images = getProjectImages(project);
 
   return {
-    id: project.id || `${slug}-${Date.now()}`,
+    id: project.id || project._id || `${slug}-${Date.now()}`,
     title,
     slug,
     link: `/progetti/${slug}`,
@@ -400,50 +398,29 @@ function normalizeAdminProject(project) {
   };
 }
 
-function readStoredAdminProjects() {
-  if (typeof window === "undefined") {
-    return [];
-  }
+async function apiRequest(path, { method = "GET", body, token } = {}) {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method,
+    headers: {
+      Accept: "application/json",
+      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
 
+  let data = {};
   try {
-    const storedProjects = window.localStorage.getItem(ADMIN_PROJECTS_STORAGE_KEY);
-    if (!storedProjects) {
-      return [];
-    }
-
-    const parsedProjects = JSON.parse(storedProjects);
-    return Array.isArray(parsedProjects)
-      ? parsedProjects.map(normalizeAdminProject).filter((project) => project.title)
-      : [];
+    data = await response.json();
   } catch {
-    return [];
-  }
-}
-
-function writeStoredAdminProjects(projectsToStore) {
-  if (typeof window === "undefined") {
-    return;
+    data = {};
   }
 
-  try {
-    window.localStorage.setItem(ADMIN_PROJECTS_STORAGE_KEY, JSON.stringify(projectsToStore));
-  } catch {
-    // Browser storage can fill up quickly if many uploaded images are saved as data URLs.
-  }
-}
-
-function createUniqueProjectSlug(title, projectsToCheck) {
-  const baseSlug = slugify(title) || "progetto";
-  const usedSlugs = new Set(projectsToCheck.map(getProjectSlug));
-  let slug = baseSlug;
-  let index = 2;
-
-  while (usedSlugs.has(slug)) {
-    slug = `${baseSlug}-${index}`;
-    index += 1;
+  if (!response.ok) {
+    throw new Error(data.message || "The request could not be completed.");
   }
 
-  return slug;
+  return data;
 }
 
 function projectToPortfolioItem(project) {
@@ -586,13 +563,14 @@ function HomePage() {
   );
 }
 
-function ProgettiPage({ portfolioItems }) {
+function ProgettiPage({ portfolioItems, projectsError }) {
   return (
     <section className="progetti-page" aria-label="Progetti">
       <div className="progetti-page-shell">
         <div className="progetti-title-wrap">
           <h1>Progetti</h1>
         </div>
+        {projectsError ? <p className="admin-error">{projectsError}</p> : null}
 
         <div className="progetti-grid" role="list">
           {portfolioItems.map((project) => {
@@ -1629,13 +1607,13 @@ const emptyProjectForm = {
   attivita: "",
 };
 
-function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+function AdminPage({ adminProjects, projectLoadError, onAddProject, onRemoveProject }) {
+  const [authToken, setAuthToken] = useState(() => {
     if (typeof window === "undefined") {
-      return false;
+      return "";
     }
 
-    return window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+    return window.sessionStorage.getItem(ADMIN_SESSION_KEY) || "";
   });
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [form, setForm] = useState(emptyProjectForm);
@@ -1643,34 +1621,44 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
   const [fileInputKey, setFileInputKey] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const isAuthenticated = Boolean(authToken);
 
   const handleCredentialChange = (event) => {
     const { name, value } = event.target;
     setCredentials((currentCredentials) => ({ ...currentCredentials, [name]: value }));
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     setFeedback("");
 
-    if (
-      credentials.username.trim() === ADMIN_USERNAME &&
-      credentials.password === ADMIN_PASSWORD
-    ) {
-      window.sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
-      setIsAuthenticated(true);
+    setIsLoggingIn(true);
+
+    try {
+      const data = await apiRequest("/api/auth/login", {
+        method: "POST",
+        body: {
+          username: credentials.username,
+          password: credentials.password,
+        },
+      });
+
+      window.sessionStorage.setItem(ADMIN_SESSION_KEY, data.token);
+      setAuthToken(data.token);
       setCredentials({ username: "", password: "" });
       setError("");
-      return;
+    } catch (loginError) {
+      setError(loginError.message);
+    } finally {
+      setIsLoggingIn(false);
     }
-
-    setError("Invalid username or password.");
   };
 
   const handleLogout = () => {
     window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
-    setIsAuthenticated(false);
+    setAuthToken("");
     setFeedback("");
     setError("");
   };
@@ -1700,29 +1688,39 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
         .filter(Boolean);
       const uploadedImages = imageFiles.length ? await filesToDataUrls(imageFiles) : [];
       const images = [...new Set([...urlImages, ...uploadedImages])];
-      const slug = createUniqueProjectSlug(title, [...progettiPortfolioItems, ...adminProjects]);
-      const project = normalizeAdminProject({
-        id: `${slug}-${Date.now()}`,
-        title,
-        slug,
-        image: images[0],
-        images,
-        progetto: form.progetto,
-        location: form.location,
-        anno: form.anno,
-        cliente: form.cliente,
-        attivita: form.attivita,
-      });
-
-      onAddProject(project);
+      const project = await onAddProject(
+        {
+          title,
+          image: images[0],
+          images,
+          progetto: form.progetto,
+          location: form.location,
+          anno: form.anno,
+          cliente: form.cliente,
+          attivita: form.attivita,
+        },
+        authToken
+      );
       setForm(emptyProjectForm);
       setImageFiles([]);
       setFileInputKey((key) => key + 1);
       setFeedback(`${project.title} added.`);
-    } catch {
-      setError("The images could not be saved. Try smaller files or use image URLs.");
+    } catch (projectError) {
+      setError(projectError.message);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDeleteProject = async (projectId) => {
+    setFeedback("");
+    setError("");
+
+    try {
+      await onRemoveProject(projectId, authToken);
+      setFeedback("Project deleted.");
+    } catch (deleteError) {
+      setError(deleteError.message);
     }
   };
 
@@ -1758,8 +1756,8 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
 
           {error ? <p className="admin-error" role="alert">{error}</p> : null}
 
-          <button type="submit" className="primary-btn admin-action-btn">
-            Login
+          <button type="submit" className="primary-btn admin-action-btn" disabled={isLoggingIn}>
+            {isLoggingIn ? "Logging in..." : "Login"}
           </button>
         </form>
       </section>
@@ -1846,6 +1844,7 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
 
         <div className="admin-projects-list">
           <h2>Added projects</h2>
+          {projectLoadError ? <p className="admin-error">{projectLoadError}</p> : null}
           {adminProjects.length ? (
             adminProjects.map((project) => (
               <article className="admin-project-row" key={project.id}>
@@ -1857,7 +1856,7 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
                 <button
                   type="button"
                   className="admin-icon-btn admin-delete-btn"
-                  onClick={() => onRemoveProject(project.id)}
+                  onClick={() => handleDeleteProject(project.id)}
                   aria-label={`Delete ${project.title}`}
                 >
                   <FaTrash />
@@ -1874,7 +1873,9 @@ function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
 }
 
 function App() {
-  const [adminProjects, setAdminProjects] = useState(() => readStoredAdminProjects());
+  const [adminProjects, setAdminProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [projectsError, setProjectsError] = useState("");
   const currentPath = normalizePath(window.location.pathname);
   const portfolioItems = [...adminProjects.map(projectToPortfolioItem), ...progettiPortfolioItems];
   const dynamicProject = adminProjects.find((project) => normalizePath(project.link) === currentPath);
@@ -1893,23 +1894,69 @@ function App() {
   const isAsurProjectPage = currentPath === asurProjectPath;
   const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a";
   const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
+  const isProjectDetailPath = currentPath.startsWith("/progetti/");
   const isServiziPage = currentPath === "/servizi";
   const isContattiPage = currentPath === "/contatti";
 
-  const handleAddAdminProject = (project) => {
-    setAdminProjects((currentProjects) => {
-      const nextProjects = [project, ...currentProjects];
-      writeStoredAdminProjects(nextProjects);
-      return nextProjects;
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadProjects() {
+      try {
+        const data = await apiRequest("/api/projects");
+        if (!isActive) {
+          return;
+        }
+
+        setAdminProjects(
+          Array.isArray(data.projects)
+            ? data.projects.map(normalizeAdminProject).filter((project) => project.title)
+            : []
+        );
+        setProjectsError("");
+      } catch (error) {
+        if (isActive) {
+          setProjectsError(error.message);
+        }
+      } finally {
+        if (isActive) {
+          setProjectsLoading(false);
+        }
+      }
+    }
+
+    loadProjects();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const handleAddAdminProject = async (project, token) => {
+    const data = await apiRequest("/api/projects", {
+      method: "POST",
+      body: project,
+      token,
     });
+
+    const createdProject = normalizeAdminProject(data.project);
+    setAdminProjects((currentProjects) => [
+      createdProject,
+      ...currentProjects.filter((currentProject) => currentProject.id !== createdProject.id),
+    ]);
+
+    return createdProject;
   };
 
-  const handleRemoveAdminProject = (projectId) => {
-    setAdminProjects((currentProjects) => {
-      const nextProjects = currentProjects.filter((project) => project.id !== projectId);
-      writeStoredAdminProjects(nextProjects);
-      return nextProjects;
+  const handleRemoveAdminProject = async (projectId, token) => {
+    await apiRequest(`/api/projects/${projectId}`, {
+      method: "DELETE",
+      token,
     });
+
+    setAdminProjects((currentProjects) =>
+      currentProjects.filter((project) => project.id !== projectId)
+    );
   };
 
   let activeLabel = currentPath === "/" ? "Home" : "";
@@ -1928,6 +1975,7 @@ function App() {
     page = (
       <AdminPage
         adminProjects={adminProjects}
+        projectLoadError={projectsError}
         onAddProject={handleAddAdminProject}
         onRemoveProject={handleRemoveAdminProject}
       />
@@ -1960,8 +2008,14 @@ function App() {
     page = <FondazioneProjectPage />;
   } else if (dynamicProject) {
     page = <DynamicProjectPage project={dynamicProject} />;
+  } else if (isProjectDetailPath && projectsLoading) {
+    page = (
+      <section className="project-detail-page" aria-label="Loading project">
+        <p>Loading project...</p>
+      </section>
+    );
   } else if (isProgettiPage) {
-    page = <ProgettiPage portfolioItems={portfolioItems} />;
+    page = <ProgettiPage portfolioItems={portfolioItems} projectsError={projectsError} />;
   } else if (isServiziPage) {
     page = <ServiziPage />;
   } else if (isContattiPage) {
