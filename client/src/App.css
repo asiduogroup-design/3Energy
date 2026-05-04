@@ -1,4 +1,115 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap");
+﻿@media (max-width: 900px) {
+  .header-inner {
+    flex-direction: column;
+    min-height: 80px;
+    padding: 10px 10px;
+  }
+  .main-nav {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: flex-start;
+  }
+  .hero-section {
+    height: 60vh;
+  }
+  .welcome-section {
+    padding: 18px 10px;
+  }
+  .projects-section {
+    padding: 0 10px;
+  }
+  .services-section {
+    grid-template-columns: 1fr;
+    margin: 0 10px;
+  }
+  .progetti-page, .project-detail-page, .servizi-page, .chi-page, .contatti-page, .admin-page {
+    padding: 14px 8px 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-inner {
+    min-height: 60px;
+    padding: 6px 4px;
+  }
+  .header-logo {
+    width: 100px;
+  }
+  .main-nav {
+    gap: 6px;
+  }
+  .nav-link {
+    font-size: 15px;
+    padding: 2px 0;
+  }
+  .hero-section {
+    height: 40vh;
+  }
+  .welcome-section {
+    padding: 10px 2px;
+    gap: 8px;
+  }
+  .welcome-logo {
+    max-width: 90vw;
+  }
+  .projects-section {
+    padding: 0 2px;
+  }
+  .projects-grid, .progetti-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .project-card, .project-card.large, .progetti-card {
+    min-height: 120px;
+  }
+  .services-section {
+    margin: 0 2px;
+  }
+  .service-card {
+    padding: 12px 2px;
+    font-size: 14px;
+  }
+  .progetti-title-wrap h1, .project-detail-copy h1, .chi-story h2, .servizi-heading h3 {
+    font-size: 22px;
+  }
+  .project-detail-meta h3, .contatti-office h3 {
+    font-size: 18px;
+  }
+  .project-detail-meta li, .project-detail-copy p, .servizi-copy p, .servizi-list li, .chi-story p, .contatti-office p, .contatti-field label, .contatti-privacy, .admin-panel-heading h1 {
+    font-size: 13px;
+  }
+  .footer-content {
+    padding: 10px 2px 12px;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .footer-left p, .footer-right a {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-logo {
+    width: 70px;
+  }
+  .hero-section {
+    height: 30vh;
+  }
+  .welcome-section, .projects-section, .services-section, .progetti-page, .project-detail-page, .servizi-page, .chi-page, .contatti-page, .admin-page {
+    padding: 4px 1vw 4px;
+  }
+  .project-card, .project-card.large, .progetti-card {
+    min-height: 80px;
+  }
+  .service-card {
+    font-size: 12px;
+  }
+  .footer-content {
+    padding: 4px 1vw 8px;
+  }
+}
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap");
 
 :root {
   --bg: #ededed;
