@@ -584,7 +584,7 @@ function ProgettiPage({ portfolioItems, projectsError }) {
             const isExternalLink = project.link.startsWith("http");
 
             return (
-              <article className="progetti-card-wrap" key={project.link} role="listitem">
+              <article className="progetti-card-wrap" key={project.id || project.link} role="listitem">
                 <a
                   href={project.link}
                   target={isExternalLink ? "_blank" : undefined}
