@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { FaArrowUp, FaChevronLeft, FaChevronRight, FaLinkedin } from "react-icons/fa";
+import {
+  FaArrowUp,
+  FaChevronLeft,
+  FaChevronRight,
+  FaImage,
+  FaLinkedin,
+  FaPlus,
+  FaSignOutAlt,
+  FaTrash,
+} from "react-icons/fa";
 
 const menuItems = [
   { label: "Home", href: "/" },
@@ -339,6 +348,136 @@ const contattiOffices = [
   },
 ];
 
+const ADMIN_PROJECTS_STORAGE_KEY = "three-energy-admin-projects";
+const ADMIN_SESSION_KEY = "three-energy-admin-session";
+const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || "admin";
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "3energy2026";
+const PROJECT_FALLBACK_IMAGE = "/images/projects/project-3.jpeg";
+
+function slugify(value) {
+  return value
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getProjectSlug(project) {
+  if (project.slug) {
+    return project.slug;
+  }
+
+  const normalizedLink = normalizePath(project.link || "");
+  return normalizedLink.split("/").filter(Boolean).pop() || slugify(project.title || "project");
+}
+
+function getProjectImages(project) {
+  const images = Array.isArray(project.images) ? project.images : [];
+  const allImages = [...images, project.image].filter(Boolean);
+  return [...new Set(allImages)];
+}
+
+function normalizeAdminProject(project) {
+  const title = (project.title || "").trim();
+  const slug = getProjectSlug(project) || slugify(title);
+  const images = getProjectImages(project);
+
+  return {
+    id: project.id || `${slug}-${Date.now()}`,
+    title,
+    slug,
+    link: `/progetti/${slug}`,
+    image: images[0] || PROJECT_FALLBACK_IMAGE,
+    images: images.length ? images : [PROJECT_FALLBACK_IMAGE],
+    progetto: (project.progetto || "").trim(),
+    location: (project.location || "").trim(),
+    anno: (project.anno || "").trim(),
+    cliente: (project.cliente || "").trim(),
+    attivita: (project.attivita || "").trim(),
+    createdAt: project.createdAt || new Date().toISOString(),
+  };
+}
+
+function readStoredAdminProjects() {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  try {
+    const storedProjects = window.localStorage.getItem(ADMIN_PROJECTS_STORAGE_KEY);
+    if (!storedProjects) {
+      return [];
+    }
+
+    const parsedProjects = JSON.parse(storedProjects);
+    return Array.isArray(parsedProjects)
+      ? parsedProjects.map(normalizeAdminProject).filter((project) => project.title)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredAdminProjects(projectsToStore) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(ADMIN_PROJECTS_STORAGE_KEY, JSON.stringify(projectsToStore));
+  } catch {
+    // Browser storage can fill up quickly if many uploaded images are saved as data URLs.
+  }
+}
+
+function createUniqueProjectSlug(title, projectsToCheck) {
+  const baseSlug = slugify(title) || "progetto";
+  const usedSlugs = new Set(projectsToCheck.map(getProjectSlug));
+  let slug = baseSlug;
+  let index = 2;
+
+  while (usedSlugs.has(slug)) {
+    slug = `${baseSlug}-${index}`;
+    index += 1;
+  }
+
+  return slug;
+}
+
+function projectToPortfolioItem(project) {
+  const normalizedProject = normalizeAdminProject(project);
+
+  return {
+    title: normalizedProject.title,
+    image: normalizedProject.image,
+    link: normalizedProject.link,
+    term: normalizedProject.attivita || "Progettazione e Direzione",
+  };
+}
+
+function splitDetailValue(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function filesToDataUrls(files) {
+  return Promise.all(
+    Array.from(files).map(
+      (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        })
+    )
+  );
+}
+
 function normalizePath(pathname) {
   if (!pathname || pathname === "/") {
     return "/";
@@ -447,7 +586,7 @@ function HomePage() {
   );
 }
 
-function ProgettiPage() {
+function ProgettiPage({ portfolioItems }) {
   return (
     <section className="progetti-page" aria-label="Progetti">
       <div className="progetti-page-shell">
@@ -456,11 +595,11 @@ function ProgettiPage() {
         </div>
 
         <div className="progetti-grid" role="list">
-          {progettiPortfolioItems.map((project) => {
+          {portfolioItems.map((project) => {
             const isExternalLink = project.link.startsWith("http");
 
             return (
-              <article className="progetti-card-wrap" key={project.title} role="listitem">
+              <article className="progetti-card-wrap" key={project.link} role="listitem">
                 <a
                   href={project.link}
                   target={isExternalLink ? "_blank" : undefined}
@@ -472,7 +611,9 @@ function ProgettiPage() {
                   <span className="progetti-card-overlay">
                     <span className="progetti-card-info">
                       <span className="progetti-card-title">{project.title}</span>
-                      <span className="progetti-card-term">Progettazione e Direzione</span>
+                      <span className="progetti-card-term">
+                        {project.term || "Progettazione e Direzione"}
+                      </span>
                     </span>
                   </span>
                 </a>
@@ -1261,6 +1402,70 @@ function FondazioneProjectPage() {
   return <FaiProjectPage />;
 }
 
+function ProjectDetailMetaBlock({ title, value }) {
+  const items = splitDetailValue(value);
+
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h3>{title}</h3>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function DynamicProjectPage({ project }) {
+  const images = getProjectImages(project);
+  const galleryImages = images.map((src, index) => ({
+    src,
+    alt: `${project.title} ${index + 1}`,
+    aspectRatio: "4 / 3",
+  }));
+
+  return (
+    <section className="project-detail-page" aria-label={`${project.title} project details`}>
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>{project.title}</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            {project.progetto || project.title}
+          </p>
+
+          <div className="project-detail-meta">
+            <ProjectDetailMetaBlock title="Location" value={project.location} />
+            <ProjectDetailMetaBlock title="Anno" value={project.anno} />
+            <ProjectDetailMetaBlock title="Cliente" value={project.cliente} />
+            <ProjectDetailMetaBlock title="Attivita" value={project.attivita} />
+          </div>
+        </article>
+
+        {galleryImages.length > 1 ? (
+          <ProjectImageSlider images={galleryImages} ariaLabel={`${project.title} image slider`} />
+        ) : (
+          <div className="project-detail-gallery project-single-photo" style={{ "--project-photo-aspect": "4 / 3" }}>
+            <img src={galleryImages[0]?.src || PROJECT_FALLBACK_IMAGE} alt={project.title} />
+          </div>
+        )}
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function ServiziPage() {
   return (
     <section className="servizi-page" aria-label="Servizi">
@@ -1414,8 +1619,266 @@ function ContattiPage() {
   );
 }
 
+const emptyProjectForm = {
+  title: "",
+  images: "",
+  progetto: "",
+  location: "",
+  anno: "",
+  cliente: "",
+  attivita: "",
+};
+
+function AdminPage({ adminProjects, onAddProject, onRemoveProject }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+  });
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [form, setForm] = useState(emptyProjectForm);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [fileInputKey, setFileInputKey] = useState(0);
+  const [feedback, setFeedback] = useState("");
+  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleCredentialChange = (event) => {
+    const { name, value } = event.target;
+    setCredentials((currentCredentials) => ({ ...currentCredentials, [name]: value }));
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    setFeedback("");
+
+    if (
+      credentials.username.trim() === ADMIN_USERNAME &&
+      credentials.password === ADMIN_PASSWORD
+    ) {
+      window.sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+      setIsAuthenticated(true);
+      setCredentials({ username: "", password: "" });
+      setError("");
+      return;
+    }
+
+    setError("Invalid username or password.");
+  };
+
+  const handleLogout = () => {
+    window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    setIsAuthenticated(false);
+    setFeedback("");
+    setError("");
+  };
+
+  const handleFieldChange = (event) => {
+    const { name, value } = event.target;
+    setForm((currentForm) => ({ ...currentForm, [name]: value }));
+  };
+
+  const handleProjectSubmit = async (event) => {
+    event.preventDefault();
+    setFeedback("");
+    setError("");
+
+    const title = form.title.trim();
+    if (!title) {
+      setError("Project title is required.");
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const urlImages = form.images
+        .split(/[\r\n,]+/)
+        .map((image) => image.trim())
+        .filter(Boolean);
+      const uploadedImages = imageFiles.length ? await filesToDataUrls(imageFiles) : [];
+      const images = [...new Set([...urlImages, ...uploadedImages])];
+      const slug = createUniqueProjectSlug(title, [...progettiPortfolioItems, ...adminProjects]);
+      const project = normalizeAdminProject({
+        id: `${slug}-${Date.now()}`,
+        title,
+        slug,
+        image: images[0],
+        images,
+        progetto: form.progetto,
+        location: form.location,
+        anno: form.anno,
+        cliente: form.cliente,
+        attivita: form.attivita,
+      });
+
+      onAddProject(project);
+      setForm(emptyProjectForm);
+      setImageFiles([]);
+      setFileInputKey((key) => key + 1);
+      setFeedback(`${project.title} added.`);
+    } catch {
+      setError("The images could not be saved. Try smaller files or use image URLs.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <section className="admin-page admin-login-page" aria-label="Admin login">
+        <form className="admin-login" onSubmit={handleLogin}>
+          <div className="admin-panel-heading">
+            <h1>Admin</h1>
+          </div>
+
+          <label className="admin-field">
+            <span>Username</span>
+            <input
+              name="username"
+              type="text"
+              value={credentials.username}
+              onChange={handleCredentialChange}
+              autoComplete="username"
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Password</span>
+            <input
+              name="password"
+              type="password"
+              value={credentials.password}
+              onChange={handleCredentialChange}
+              autoComplete="current-password"
+            />
+          </label>
+
+          {error ? <p className="admin-error" role="alert">{error}</p> : null}
+
+          <button type="submit" className="primary-btn admin-action-btn">
+            Login
+          </button>
+        </form>
+      </section>
+    );
+  }
+
+  return (
+    <section className="admin-page" aria-label="Admin panel">
+      <div className="admin-panel-heading">
+        <div>
+          <h1>Admin</h1>
+          <p>Projects</p>
+        </div>
+        <button type="button" className="admin-icon-btn" onClick={handleLogout} aria-label="Logout">
+          <FaSignOutAlt />
+        </button>
+      </div>
+
+      <div className="admin-layout">
+        <form className="admin-project-form" onSubmit={handleProjectSubmit}>
+          <label className="admin-field">
+            <span>Title of the project</span>
+            <input name="title" type="text" value={form.title} onChange={handleFieldChange} />
+          </label>
+
+          <label className="admin-field">
+            <span>Images</span>
+            <textarea
+              name="images"
+              rows={3}
+              value={form.images}
+              onChange={handleFieldChange}
+              placeholder="https://example.com/image.jpg"
+            />
+          </label>
+
+          <label className="admin-file-field">
+            <FaImage />
+            <span>Upload images</span>
+            <input
+              key={fileInputKey}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(event) => setImageFiles(Array.from(event.target.files || []))}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Progetto</span>
+            <textarea name="progetto" rows={3} value={form.progetto} onChange={handleFieldChange} />
+          </label>
+
+          <div className="admin-form-grid">
+            <label className="admin-field">
+              <span>Location</span>
+              <input name="location" type="text" value={form.location} onChange={handleFieldChange} />
+            </label>
+
+            <label className="admin-field">
+              <span>Anno</span>
+              <input name="anno" type="text" value={form.anno} onChange={handleFieldChange} />
+            </label>
+          </div>
+
+          <label className="admin-field">
+            <span>Cliente</span>
+            <input name="cliente" type="text" value={form.cliente} onChange={handleFieldChange} />
+          </label>
+
+          <label className="admin-field">
+            <span>Attivita</span>
+            <textarea name="attivita" rows={3} value={form.attivita} onChange={handleFieldChange} />
+          </label>
+
+          {error ? <p className="admin-error" role="alert">{error}</p> : null}
+          {feedback ? <p className="admin-feedback" role="status">{feedback}</p> : null}
+
+          <button type="submit" className="primary-btn admin-action-btn" disabled={isSaving}>
+            <FaPlus />
+            {isSaving ? "Adding..." : "Add project"}
+          </button>
+        </form>
+
+        <div className="admin-projects-list">
+          <h2>Added projects</h2>
+          {adminProjects.length ? (
+            adminProjects.map((project) => (
+              <article className="admin-project-row" key={project.id}>
+                <img src={project.image} alt={project.title} />
+                <div>
+                  <h3>{project.title}</h3>
+                  <a href={project.link}>{project.link}</a>
+                </div>
+                <button
+                  type="button"
+                  className="admin-icon-btn admin-delete-btn"
+                  onClick={() => onRemoveProject(project.id)}
+                  aria-label={`Delete ${project.title}`}
+                >
+                  <FaTrash />
+                </button>
+              </article>
+            ))
+          ) : (
+            <p className="admin-empty">No projects added yet.</p>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
+  const [adminProjects, setAdminProjects] = useState(() => readStoredAdminProjects());
   const currentPath = normalizePath(window.location.pathname);
+  const portfolioItems = [...adminProjects.map(projectToPortfolioItem), ...progettiPortfolioItems];
+  const dynamicProject = adminProjects.find((project) => normalizePath(project.link) === currentPath);
+  const isAdminPage = currentPath === "/admin";
   const isChiSiamoPage = currentPath === "/chi-siamo";
   const isSiasProjectPage = currentPath === siasProjectPath;
   const isFaiProjectPage = currentPath === faiProjectPath;
@@ -1428,12 +1891,28 @@ function App() {
   const isContecoProjectPage = currentPath === contecoProjectPath;
   const isFendiProjectPage = currentPath === fendiProjectPath;
   const isAsurProjectPage = currentPath === asurProjectPath;
-const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a"; 
- const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
+  const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a";
+  const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
   const isServiziPage = currentPath === "/servizi";
   const isContattiPage = currentPath === "/contatti";
 
-  let activeLabel = "Home";
+  const handleAddAdminProject = (project) => {
+    setAdminProjects((currentProjects) => {
+      const nextProjects = [project, ...currentProjects];
+      writeStoredAdminProjects(nextProjects);
+      return nextProjects;
+    });
+  };
+
+  const handleRemoveAdminProject = (projectId) => {
+    setAdminProjects((currentProjects) => {
+      const nextProjects = currentProjects.filter((project) => project.id !== projectId);
+      writeStoredAdminProjects(nextProjects);
+      return nextProjects;
+    });
+  };
+
+  let activeLabel = currentPath === "/" ? "Home" : "";
   if (isChiSiamoPage) {
     activeLabel = "Chi Siamo";
   } else if (isProgettiPage) {
@@ -1445,7 +1924,15 @@ const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a";
   }
 
   let page = <HomePage />;
-  if (isChiSiamoPage) {
+  if (isAdminPage) {
+    page = (
+      <AdminPage
+        adminProjects={adminProjects}
+        onAddProject={handleAddAdminProject}
+        onRemoveProject={handleRemoveAdminProject}
+      />
+    );
+  } else if (isChiSiamoPage) {
     page = <ChiSiamoPage />;
   } else if (isSiasProjectPage) {
     page = <SiasProjectPage />;
@@ -1466,14 +1953,15 @@ const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a";
   } else if (isAsurProjectPage) {
     page = <AsurProjectPage />;
   } else if (isUesisaProjectPage) {
-  page = <UesisaProjectPage />;
-}
-  else if (isKosProjectPage) {
+    page = <UesisaProjectPage />;
+  } else if (isKosProjectPage) {
     page = <KosProjectPage />;
   } else if (isFondazioneProjectPage) {
     page = <FondazioneProjectPage />;
+  } else if (dynamicProject) {
+    page = <DynamicProjectPage project={dynamicProject} />;
   } else if (isProgettiPage) {
-    page = <ProgettiPage />;
+    page = <ProgettiPage portfolioItems={portfolioItems} />;
   } else if (isServiziPage) {
     page = <ServiziPage />;
   } else if (isContattiPage) {
