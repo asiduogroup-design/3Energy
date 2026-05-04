@@ -349,7 +349,8 @@ const contattiOffices = [
 ];
 
 const ADMIN_SESSION_KEY = "three-energy-admin-session";
-const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://127.0.0.1:5050" : "");
 const PROJECT_FALLBACK_IMAGE = "/images/projects/project-3.jpeg";
 
 function slugify(value) {
@@ -399,15 +400,21 @@ function normalizeAdminProject(project) {
 }
 
 async function apiRequest(path, { method = "GET", body, token } = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers: {
-      Accept: "application/json",
-      ...(body ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method,
+      headers: {
+        Accept: "application/json",
+        ...(body ? { "Content-Type": "application/json" } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error("API server is not running. Start the server on port 5000 and try again.");
+  }
 
   let data = {};
   try {
