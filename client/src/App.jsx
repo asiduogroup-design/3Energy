@@ -350,7 +350,10 @@ const contattiOffices = [
 
 const ADMIN_SESSION_KEY = "three-energy-admin-session";
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://127.0.0.1:5050" : "");
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV
+    ? "http://127.0.0.1:5050"
+    : "https://threeenergy.onrender.com");
 const PROJECT_FALLBACK_IMAGE = "/images/projects/project-3.jpeg";
 
 function slugify(value) {
