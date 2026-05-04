@@ -24,6 +24,10 @@ const kosProjectPath = "/progetti/kos-care-s-r-l";
 const fondazioneProjectPath = "/progetti/fondazione-collegio-delle-universita-milanesi";
 const eurocommercialProjectPath = "/progetti/eurocommercial-properties-italia-s-r-l-2";
 const aquilaProjectPath = "/progetti/aquila-clean-energy-italy-s-r-l";
+const pensaProjectPath = "/progetti/pensa-pharma-s-p-a";
+const contecoProjectPath = "/progetti/conteco-check-s-r-l";
+const fendiProjectPath = "/progetti/fendi-switzerland-s-a-2";
+const asurProjectPath = "/progetti/asur-marche";
 const originalProjectsOrigin = "https://www.3energy.it";
 
 function toHostedProjectPath(link) {
@@ -87,33 +91,29 @@ const progettiPortfolioItems = [
   {
     title: "Pensa Pharma S.p.A.",
     image: "https://www.3energy.it/wp-content/uploads/2023/06/PENSA-PHARMA-700x580.jpg",
-    link: "https://www.3energy.it/progetti/pensa-pharma-s-p-a/",
+    link: pensaProjectPath,
   },
   {
     title: "Conteco Check S.r.l.",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image14-700x580.jpeg",
-    link: "https://www.3energy.it/progetti/conteco-check-s-r-l/",
+    link: contecoProjectPath,
   },
   {
     title: "Fendi Switzerland S.A.",
     image: "https://www.3energy.it/wp-content/uploads/2023/05/1Fendi-700x580.jpg",
-    link: "https://www.3energy.it/progetti/fendi-switzerland-s-a-2/",
+    link: fendiProjectPath,
   },
   {
     title: "ASUR Marche",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image27.jpeg",
-    link: "https://www.3energy.it/progetti/asur-marche/",
+    link: asurProjectPath,
   },
   {
     title: "Gabbiano S.p.a.",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image5-700x580.jpeg",
     link: "https://www.3energy.it/progetti/gabbiano-s-p-a/",
   },
-  {
-    title: "Uesisa S.p.a.",
-    image: "https://www.3energy.it/wp-content/uploads/2023/02/image8-700x580.jpeg",
-    link: "https://www.3energy.it/progetti/uesisa-s-p-a-2/",
-  },
+ 
   {
     title: "CNPADC - Cassa dei Dottori Commercialisti",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image15-700x580.png",
@@ -207,8 +207,7 @@ const progettiPortfolioItems = [
   {
     title: "Uesisa S.p.a.",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image4-700x580.jpeg",
-    link: "https://www.3energy.it/progetti/uesisa-s-p-a/",
-  },
+link: "/progetti/uesisa-s-p-a", },
   {
     title: "Fondazione Opera Pia Mastai Ferretti",
     image: "https://www.3energy.it/wp-content/uploads/2023/02/image19-700x580.jpeg",
@@ -545,7 +544,59 @@ function SiasProjectPage() {
     </section>
   );
 }
+function UesisaProjectPage() {
+  const galleryImages = [
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/02/image8.jpeg",
+      alt: "Uesisa project",
+      aspectRatio: "4 / 3",
+    },
+  ];
 
+  return (
+    <section className="project-detail-page" aria-label="Uesisa project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Uesisa S.p.a.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            (paste your project description here from HTML)
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>(add from your HTML)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>(add year)</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Uesisa S.p.a.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <ProjectImageSlider images={galleryImages} ariaLabel="Uesisa image slider" />
+      </div>
+
+      <div className="project-detail-actions">
+        <a href="/progetti" className="primary-btn">
+          Torna ai progetti
+        </a>
+      </div>
+    </section>
+  );
+}
 function FaiProjectPage() {
   return (
     <section className="project-detail-page" aria-label="FAI project details">
@@ -874,8 +925,278 @@ function AquilaProjectPage() {
         <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
           &#9638;
         </a>
-        <a href="/progetti/pensa-pharma-s-p-a" className="project-detail-nav-link project-detail-nav-next">
+        <a href={pensaProjectPath} className="project-detail-nav-link project-detail-nav-next">
           Pensa Pharma S.p.A. &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function PensaProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="Pensa Pharma project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Pensa Pharma S.p.A.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Realizzazione nuova sede della societa Pensa Pharma Italia
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Milano</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Pensa Pharma S.p.A.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery project-single-photo" style={{ "--project-photo-aspect": "800 / 1067" }}>
+          <img
+            src="https://www.3energy.it/wp-content/uploads/2023/06/PENSA-PHARMA.jpg"
+            alt="Pensa Pharma Italia office"
+          />
+        </div>
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href={aquilaProjectPath} className="project-detail-nav-link">
+          &lt; Aquila Clean Energy Italy S.r.l.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href={contecoProjectPath} className="project-detail-nav-link project-detail-nav-next">
+          Conteco Check S.r.l. &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function ContecoProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="Conteco Check project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Conteco Check S.r.l.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Nuova Accademia della Guardia di Finanza
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Bergamo</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2019 - 2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Conteco Check S.r.l.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Collaudi funzionali e prestazionali impianti MEP, consulenza e certificazione antincendio</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery project-single-photo" style={{ "--project-photo-aspect": "1440 / 800" }}>
+          <img
+            src="https://www.3energy.it/wp-content/uploads/2023/02/image14.jpeg"
+            alt="Nuova Accademia della Guardia di Finanza"
+          />
+        </div>
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href={pensaProjectPath} className="project-detail-nav-link">
+          &lt; Pensa Pharma S.p.A.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href={fendiProjectPath} className="project-detail-nav-link project-detail-nav-next">
+          Fendi Switzerland S.A. &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function FendiProjectPage() {
+  const galleryImages = [
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/1Fendi.jpg",
+      alt: "Fendi Switzerland headquarters exterior",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/2Fendi.jpeg",
+      alt: "Fendi Switzerland headquarters interior",
+      aspectRatio: "1024 / 777",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/3Fendi.jpeg",
+      alt: "Fendi Switzerland headquarters workspace",
+      aspectRatio: "4 / 3",
+    },
+    {
+      src: "https://www.3energy.it/wp-content/uploads/2023/05/4Fendi.jpeg",
+      alt: "Fendi Switzerland headquarters vertical view",
+      aspectRatio: "3 / 4",
+    },
+  ];
+
+  return (
+    <section className="project-detail-page" aria-label="Fendi Switzerland project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>Fendi Switzerland S.A.</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Realizzazione nuovo Headquarter Fendi Switzerland
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Mendrisio - Svizzera</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>Fendi Switzerland S.A.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti MEP</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <ProjectImageSlider images={galleryImages} ariaLabel="Fendi image slider" />
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href={contecoProjectPath} className="project-detail-nav-link">
+          &lt; Conteco Check S.r.l.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href={asurProjectPath} className="project-detail-nav-link project-detail-nav-next">
+          ASUR Marche &gt;
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function AsurProjectPage() {
+  return (
+    <section className="project-detail-page" aria-label="ASUR Marche project details">
+      <div className="project-detail-layout">
+        <article className="project-detail-copy">
+          <h1>ASUR Marche</h1>
+          <p>
+            <strong>Progetto:</strong>
+            <br />
+            Rifacimento cabina elettrica "C" dell'Ospedale di Macerata
+          </p>
+
+          <div className="project-detail-meta">
+            <div>
+              <h3>Location</h3>
+              <ul>
+                <li>Macerata</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Anno</h3>
+              <ul>
+                <li>2021 - 2022</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <ul>
+                <li>ASUR Marche</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Attivita</h3>
+              <ul>
+                <li>Progettazione esecutiva e direzione lavori impianti elettrici</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div className="project-detail-gallery project-single-photo" style={{ "--project-photo-aspect": "650 / 365" }}>
+          <img
+            src="https://www.3energy.it/wp-content/uploads/2023/02/image27.jpeg"
+            alt="Cabina elettrica dell'Ospedale di Macerata"
+          />
+        </div>
+      </div>
+
+      <nav className="project-detail-navigation" aria-label="Portfolio navigation">
+        <a href={fendiProjectPath} className="project-detail-nav-link">
+          &lt; Fendi Switzerland S.A.
+        </a>
+        <a href="/progetti" className="project-detail-grid-link" aria-label="Back to projects">
+          &#9638;
+        </a>
+        <a href="/progetti/gabbiano-s-p-a" className="project-detail-nav-link project-detail-nav-next">
+          Gabbiano S.p.a. &gt;
         </a>
       </nav>
     </section>
@@ -1103,7 +1424,12 @@ function App() {
   const isFondazioneProjectPage = currentPath === fondazioneProjectPath;
   const isEurocommercialProjectPage = currentPath === eurocommercialProjectPath;
   const isAquilaProjectPage = currentPath === aquilaProjectPath;
-  const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
+  const isPensaProjectPage = currentPath === pensaProjectPath;
+  const isContecoProjectPage = currentPath === contecoProjectPath;
+  const isFendiProjectPage = currentPath === fendiProjectPath;
+  const isAsurProjectPage = currentPath === asurProjectPath;
+const isUesisaProjectPage = currentPath === "/progetti/uesisa-s-p-a"; 
+ const isProgettiPage = currentPath === "/progetti" || currentPath.startsWith("/progetti/");
   const isServiziPage = currentPath === "/servizi";
   const isContattiPage = currentPath === "/contatti";
 
@@ -1131,7 +1457,18 @@ function App() {
     page = <EurocommercialProjectPage />;
   } else if (isAquilaProjectPage) {
     page = <AquilaProjectPage />;
-  } else if (isKosProjectPage) {
+  } else if (isPensaProjectPage) {
+    page = <PensaProjectPage />;
+  } else if (isContecoProjectPage) {
+    page = <ContecoProjectPage />;
+  } else if (isFendiProjectPage) {
+    page = <FendiProjectPage />;
+  } else if (isAsurProjectPage) {
+    page = <AsurProjectPage />;
+  } else if (isUesisaProjectPage) {
+  page = <UesisaProjectPage />;
+}
+  else if (isKosProjectPage) {
     page = <KosProjectPage />;
   } else if (isFondazioneProjectPage) {
     page = <FondazioneProjectPage />;

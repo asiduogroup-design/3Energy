@@ -34,18 +34,21 @@ a {
 }
 
 .site-header {
-  background-color: #ffffff;
+  background: none;
+  box-shadow: none;
+  border: none;
   position: sticky;
   top: 0;
-  z-index: 100;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-inner {
   width: min(1400px, 100%);
   margin: 0 auto;
-  min-height: 114px;
+  min-height: 116px;
   padding: 20px 38px;
   display: flex;
   align-items: center;
