@@ -1,4 +1,5 @@
-﻿@media (max-width: 900px) {
+﻿@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap");
+@media (max-width: 900px) {
   .header-inner {
     flex-direction: column;
     min-height: 80px;
@@ -109,11 +110,10 @@
     padding: 4px 1vw 8px;
   }
 }
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap");
 
 :root {
   --bg: #ededed;
-  --text-main: #3f4f68;
+--text-main: #57595b;
   --text-menu: #4f535c;
   --text-soft: #9c9c9c;
   --line: #565656;
@@ -130,7 +130,7 @@
 
 body {
   margin: 0;
-  background-color: var(--bg);
+background-color: #ededed;
   color: var(--text-main);
 }
 
@@ -141,8 +141,7 @@ a {
 .site-root {
   width: min(1400px, 100%);
   margin: 0 auto;
-  background-color: var(--bg);
-}
+background-color: #ededed;}
 
 .site-header {
   background: none;
@@ -157,14 +156,19 @@ a {
 }
 
 .header-inner {
-  width: min(1400px, 100%);
+  width: 1400px;
+  max-width: 100%;
+
   margin: 0 auto;
+
   min-height: 116px;
-  padding: 20px 38px;
+
+  padding-left: 38px;
+  padding-right: 38px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 26px;
 }
 
 .logo-link {
@@ -192,8 +196,9 @@ a {
   position: relative;
   text-decoration: none;
   color: #4f535c;
-  font-size: 25px;
+    font-size: 22px;
   font-weight: 500;
+  letter-spacing: 0.2px;
   line-height: 1.15;
   padding: 4px 0;
   transition: color 0.2s ease;
@@ -227,11 +232,17 @@ a {
 
 .hero-section {
   position: relative;
+
   width: 100vw;
+
   margin-left: calc(50% - 50vw);
-  height: 100vh;
-  height: 100svh;
+
+  height: calc(100vh - 116px);
+
   overflow: hidden;
+}
+.hero-section:hover .hero-photo {
+  transform: scale(1.03);
 }
 
 .hero-photo {
@@ -240,6 +251,8 @@ a {
   object-fit: cover;
   display: block;
   animation: fade-in 0.45s ease;
+    transition: transform 7s ease;
+
 }
 
 @keyframes fade-in {
@@ -253,8 +266,8 @@ a {
 
 .hero-caption {
   position: absolute;
-  left: 18px;
-  bottom: 14px;
+  left: 35px;
+  bottom: 45px;
   margin: 0;
   color: #ffffff;
   font-size: 22px;
@@ -283,11 +296,17 @@ a {
 }
 
 .welcome-section {
-  padding: 52px 38px 30px;
+  width: 1400px;
+  max-width: 100%;
+
+  margin: auto;
+
+  padding: 60px 38px 35px;
+
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 36px;
-  align-items: start;
+
+  gap: 55px;
 }
 
 .welcome-logo {
@@ -337,8 +356,10 @@ a {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 10px;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 14px;
 }
 
 .project-card {
@@ -383,6 +404,13 @@ a {
   margin-top: 15px;
   margin-bottom: 4px;
 }
+.project-card img {
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover img {
+  transform: scale(1.06);
+}
 
 .services-section {
   display: grid;
@@ -392,7 +420,9 @@ a {
 
 .service-card {
   text-align: center;
-  padding: 22px 8px 42px;
+ padding-top: 30px;
+  padding-bottom: 50px;
+
   border-right: 1px solid #57595b;
   min-width: 0;
 }
@@ -406,7 +436,11 @@ a {
   max-width: 100%;
   height: auto;
 }
-
+.site-root {
+  width: 1400px;
+  max-width: 100%;
+  margin: auto;
+}
 .service-card h2 {
   margin: 14px auto 0;
   max-width: 88%;
@@ -414,7 +448,7 @@ a {
   line-height: 1.15;
   letter-spacing: 0.01em;
   color: var(--text-soft);
-  font-weight: 400;
+  font-weight: 300;
   white-space: normal;
   overflow-wrap: break-word;
   word-break: normal;
