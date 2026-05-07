@@ -23,7 +23,7 @@
   .services-section {
     grid-template-columns: 1fr;
     margin: 0 10px;
-    background:white
+    background-color: white;
   }
   .progetti-page, .project-detail-page, .servizi-page, .chi-page, .contatti-page, .admin-page {
     padding: 14px 8px 8px;
