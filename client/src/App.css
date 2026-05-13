@@ -760,6 +760,59 @@ background-color: #ededed;}
   width: min(300px, 100%);
   height: auto;
   display: block;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-duration: 0.9s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chi-metric-card:nth-child(1) img {
+  animation-name: chi-metric-from-top;
+  animation-delay: 0.15s;
+}
+
+.chi-metric-card:nth-child(2) img {
+  animation-name: chi-metric-from-bottom;
+  animation-delay: 0.75s;
+}
+
+.chi-metric-card:nth-child(3) img {
+  animation-name: chi-metric-from-upper-right;
+  animation-delay: 1.35s;
+}
+
+@keyframes chi-metric-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-120px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chi-metric-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(120px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chi-metric-from-upper-right {
+  from {
+    opacity: 0;
+    transform: translate(150px, -120px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 .chi-divider {
